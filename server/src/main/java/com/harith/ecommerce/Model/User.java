@@ -17,13 +17,13 @@ public class User {
     private ArrayList<String> purchasedItems;
 
     // Default Constructor
-    User() {
+    public User() {
         this.availableMoney = 5000;
         this.purchasedItems = new ArrayList<>();
     }
 
     // Parameterized constructor
-    User(String U, String PW, String G, String CURL) {
+    public User(String U, String PW, String G, String CURL) {
         this.username = U;
         this.password = PW;
         this.gender = G;

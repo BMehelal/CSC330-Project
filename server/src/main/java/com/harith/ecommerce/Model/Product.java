@@ -13,21 +13,24 @@ public class Product {
     private String description;
     private String productURL;
     private int stockQuanity;
+    private String sellerId;
 
     // Default Constructor
-    Product() {
+    public Product() {
 
     }
 
     // Parameterized constructor
-    Product(String PN, int PR, String DE, String PURL, int SQ) {
+    public Product(String PN, int PR, String DE, String PURL, int SQ, String SI) {
         this.productName = PN;
         this.price = PR;
         this.description = DE;
         this.productURL = PURL;
         this.stockQuanity = SQ;
+        this.sellerId = SI;
     }
-
+public void setSellerId(String SI){this.sellerId = SI;}
+    public String gettSellerId(){return this.sellerId;}
     public String getProductId() {
         return this.id;
     }
