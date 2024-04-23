@@ -1,5 +1,6 @@
 package com.harith.ecommerce.Resources;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class CheckoutRequest {
@@ -16,16 +17,19 @@ public class CheckoutRequest {
     }
 public void setCustomerId(String customerId){this.customerId = customerId;}
 
-public void setCustomerId(Map<String, Integer> cartItem) {
-    this.cartItem = cartItem;
-}
     public String getCustomerId(){return this.customerId;}
 
     public Map<String, Integer> getCartItem() {
         return this.cartItem;
     }
+        public void setCartItem(Map<String, Integer> cartItem) {
+            this.cartItem = cartItem;
+    }
 
     public void addCartItem(String key, int value) {
+        if (cartItem == null) {
+            cartItem = new HashMap<>();
+        }
         cartItem.put(key, value);
-}
+    }
 }

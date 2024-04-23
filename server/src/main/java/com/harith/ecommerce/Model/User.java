@@ -1,6 +1,8 @@
 package com.harith.ecommerce.Model;
 
 import java.util.ArrayList;
+import java.util.Set;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -36,6 +38,7 @@ public class User {
     public String getId() {
         return this.id;
     }
+
     public String getUsername() {
         return this.username;
     }
@@ -83,6 +86,11 @@ public class User {
     public void addPurchasedItem(String item) {
         this.purchasedItems.add(item);
     }
+
+    public void addPurchasedItem(Set<String> item) {
+        this.purchasedItems.addAll(item);
+    }
+    
 
     public void setPurchasedItems(ArrayList<String> PI) {
         this.purchasedItems = PI;
