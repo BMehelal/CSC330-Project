@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,10 +36,10 @@ public class CheckoutController {
     @PostMapping("checkout")
     @Transactional
     public ResponseEntity<String> checkout(@RequestBody CheckoutRequest checkoutRequest) {
-     String username = checkoutRequest.getCustomerId();
+     String userID = checkoutRequest.getCustomerId();
         Map<String, Integer> cartItems = checkoutRequest.getCartItem();
         try {
-         Optional<User> optionalUser = userRepository.findByUsername(username);
+         Optional<User> optionalUser = userRepository.findById(userID);
          Set<String> setOfPoductIDs = cartItems.keySet();
          List<Product> products = productRepository.findAllById(setOfPoductIDs);
             if (!optionalUser.isPresent()) {
@@ -51,8 +52,8 @@ public class CheckoutController {
          User user = optionalUser.get();
             int totalPrice = 0;
             for (Map.Entry<String, Integer> item : cartItems.entrySet()) {
-             String productID = item.getKey();
-             int quanity = item.getValue();
+                String productID = item.getKey();
+                int quanity = item.getValue();
                 Product product = null;
                 for (Product p : products) {
                     if (p.getProductId().equals(productID)) {
@@ -68,8 +69,20 @@ public class CheckoutController {
                 }
                 totalPrice += product.getPrice() * quanity;
                 product.setStockQuanity(product.getStockQuanity() - quanity);
-
+                String sellerID = product.getSellerId();
+                if (!sellerID.equals("0")) {
+                    Optional<User> optionalSeller = userRepository.findById(sellerID);
+                    if (!optionalSeller.isPresent()) {
+                        return ResponseEntity.status(404).body(UserError.NO_USER_FOUND.getErrorMessage());
+                    }
+                    User seller = optionalSeller.get();
+                    int currentPrice = product.getPrice() * quanity;
+                    seller.setAvailableMoney(seller.getAvailableMoney() + currentPrice);
+                    userRepository.save(seller);
+                }
+                //end of the loop
             }
+            
             if (totalPrice > user.getAvailableMoney()) {
                 return ResponseEntity.status(400).body(ProductError.INSUFFICIENT_FUNDS.getErrorMessage());
             }
