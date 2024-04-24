@@ -1,18 +1,16 @@
 package com.harith.ecommerce.Controller;
 
+import com.harith.ecommerce.Errors.UserError;
 import com.harith.ecommerce.Model.User;
 import com.harith.ecommerce.Repository.UserRepository;
 import com.harith.ecommerce.Resources.CharacterRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-// Basically getting(loading everytime) user's profile picture
+// Basically getting(when loading everytime) user's profile picture
 // Controller for handling requests related to Character
 @RestController
 @RequestMapping("api")
@@ -23,7 +21,7 @@ public class CharacterController {
 
     }
 
-    @PostMapping("getCharacterURL")
+    @GetMapping("character")
     //When user load on to page where he can see the profile picture(it post a request to get url for that picture)
     public ResponseEntity<String> getCharacterURL(@RequestBody CharacterRequest characterRequest){
         //Response Entity from Spring framework(deal with api stuff, https stuff)
@@ -37,7 +35,7 @@ public class CharacterController {
             }
             else {
                 // User not found, ResponseEntity error code 404
-                return ResponseEntity.status(404).body("User not found");
+                return ResponseEntity.status(404).body(UserError.NO_USER_FOUND.getErrorMessage());
             }
         }
         catch (NoSuchElementException e) {
