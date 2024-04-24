@@ -76,6 +76,10 @@ public class CheckoutController {
                         return ResponseEntity.status(404).body(UserError.NO_USER_FOUND.getErrorMessage());
                     }
                     User seller = optionalSeller.get();
+                    if (user.getId().equals(seller.getId())) {
+                        return ResponseEntity.status(400)
+                                .body(ProductError.CANNOT_BUY_YOUR_OWN_PRODUCT.getErrorMessage());
+                    }
                     int currentPrice = product.getPrice() * quanity;
                     seller.setAvailableMoney(seller.getAvailableMoney() + currentPrice);
                     userRepository.save(seller);

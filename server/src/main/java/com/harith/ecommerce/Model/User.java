@@ -20,7 +20,7 @@ public class User {
 
     // Default Constructor
     public User() {
-        this.availableMoney = 5000;
+        this.availableMoney = 2500;
         this.purchasedItems = new ArrayList<>();
     }
 

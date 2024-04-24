@@ -15,6 +15,7 @@ public class Product {
     private int stockQuanity;
     private String sellerName;
     private String sellerId;
+    private String vocation;
 
     // Default Constructor
     public Product() {
@@ -22,7 +23,7 @@ public class Product {
     }
 
     // Parameterized constructor
-    public Product(String PN, int PR, String DE, String PURL, int SQ, String SN, String SI) {
+    public Product(String PN, int PR, String DE, String PURL, int SQ, String SN, String SI, String V) {
         this.productName = PN;
         this.price = PR;
         this.description = DE;
@@ -30,9 +31,20 @@ public class Product {
         this.stockQuanity = SQ;
         this.sellerName = SN;
         this.sellerId = SI;
+        this.vocation = V;
+
     }
-public void setSellerId(String SI){this.sellerId = SI;}
-    public String getSellerId(){return this.sellerId;}
+    public void setVocation(String V){this.vocation = V;}
+
+    public String getVocation() {
+    return this.vocation;
+}
+    
+    public void setSellerId(String SI){this.sellerId = SI;}
+
+    public String getSellerId() {
+    return this.sellerId;
+    }
     public String getProductId() {
         return this.id;
     }
