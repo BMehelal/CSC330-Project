@@ -16,6 +16,7 @@ import java.util.Optional;
 @RequestMapping("api")
 public class CharacterController {
     private final UserRepository userRepository;
+    
     public CharacterController(UserRepository userRepository) {
         this.userRepository = userRepository;
 
