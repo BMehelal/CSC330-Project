@@ -18,8 +18,8 @@ import com.harith.ecommerce.Resources.LoginRequest;
 @RestController
 @RequestMapping("api")
 public class LoginController {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     public LoginController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -30,13 +30,13 @@ public class LoginController {
     
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         try {
-            String username = loginRequest.getUsername();
-            Optional<User> optionalUser = userRepository.findByUsername(username);
+         String username = loginRequest.getUsername();
+         Optional<User> optionalUser = userRepository.findByUsername(username);
             if (!optionalUser.isPresent()) {
                 return ResponseEntity.status(401).body(UserError.NO_USER_FOUND.getErrorMessage());
             }
-            User user = optionalUser.get();
-            boolean isPasswordValid = passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
+         User user = optionalUser.get();
+         boolean isPasswordValid = passwordEncoder.matches(loginRequest.getPassword(), user.getPassword());
             if (!isPasswordValid) {
                 return ResponseEntity.status(401).body(UserError.WRONG_CREDENTIALS.getErrorMessage());
             }

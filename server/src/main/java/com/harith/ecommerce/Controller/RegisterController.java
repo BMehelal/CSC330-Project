@@ -29,17 +29,17 @@ public class RegisterController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterRequest registerRequest) {
-        String username = registerRequest.getUsername();
+    public ResponseEntity<String> registerUser(@RequestBody final RegisterRequest registerRequest) {
+        final String username = registerRequest.getUsername();
         try {
-            Optional<User> existingUser = userRepository.findByUsername(username);
+            final Optional<User> existingUser = userRepository.findByUsername(username);
             if (existingUser.isPresent()) {
                 return ResponseEntity.status(400)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(UserError.USERNAME_ALREADY_EXISTS.getErrorMessage());
             }
-            String hasedPassword = passwordEncoder.encode(registerRequest.getPassword());
-            User user = new User(username, hasedPassword, registerRequest.getGender(),
+            final String hashedPassword = passwordEncoder.encode(registerRequest.getPassword());
+            final User user = new User(username, hashedPassword, registerRequest.getGender(),
                     registerRequest.getCharacterURL());
             userRepository.save(user);
             return ResponseEntity.status(201).body("User registered successfully");
