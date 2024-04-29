@@ -1,6 +1,6 @@
 import { useState, SyntheticEvent } from "react";
 import axios from "axios";
-import { UserError } from "../../errors";
+import { UserError } from "../../models/errors";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 export const AuthPage = () => {
