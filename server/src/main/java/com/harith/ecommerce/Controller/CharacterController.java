@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-// Basically getting(when loading everytime) user's profile picture
+// Basically rendering the user's profile picture
 // Controller for handling requests related to Character
 @RestController
 @RequestMapping("api")
