@@ -21,7 +21,6 @@ import org.springframework.http.MediaType;
 @RequestMapping("api")
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class RegisterController {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 

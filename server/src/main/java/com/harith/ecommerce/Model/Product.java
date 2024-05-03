@@ -90,7 +90,7 @@ public class Product {
     }
     public void SetSellerName(String SN){this.sellerName = SN;}
 
-    public String SetSellerName() {
+    public String getSellerName() {
         return this.sellerName;
     
     }
