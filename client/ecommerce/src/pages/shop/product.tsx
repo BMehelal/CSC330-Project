@@ -21,9 +21,10 @@ export const Product = (props: Props) => {
   // styling would be turn all of these into cards
   return (
     <>
-      <img src={productURL} />{" "}
+      
       <div>
         <h3>{productName}</h3>
+        <img src={productURL} />
         <p>{description}</p>
         <p>Cost: {price} Relm</p>
         <p>Speciality: {vocation}</p>

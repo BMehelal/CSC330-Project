@@ -6,7 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,7 @@ public class CheckoutController {
     @PostMapping("checkout")
     @Transactional
     public ResponseEntity<String> checkout(@RequestBody CheckoutRequest checkoutRequest) {
-     String userID = checkoutRequest.getCustomerId();
+        String userID = checkoutRequest.getCustomerId();
         Map<String, Integer> cartItems = checkoutRequest.getCartItem();
         try {
          Optional<User> optionalUser = userRepository.findById(userID);
@@ -91,7 +92,7 @@ public class CheckoutController {
                 return ResponseEntity.status(400).body(ProductError.INSUFFICIENT_FUNDS.getErrorMessage());
             }
             user.setAvailableMoney(user.getAvailableMoney() - totalPrice);
-            user.addPurchasedItem(setOfPoductIDs);
+            user.addPurchasedItem(cartItems);
             userRepository.save(user);
             productRepository.saveAll(products);
             return ResponseEntity.status(200).body(setOfPoductIDs.toString());
