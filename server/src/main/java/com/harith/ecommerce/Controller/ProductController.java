@@ -1,5 +1,6 @@
 package com.harith.ecommerce.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +9,6 @@ import com.harith.ecommerce.Model.Product;
 import com.harith.ecommerce.Model.User;
 import com.harith.ecommerce.Repository.ProductRepository;
 import com.harith.ecommerce.Repository.UserRepository;
-
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class ProductController {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+
     public ProductController(ProductRepository productRepository, UserRepository userRepository) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
@@ -39,5 +40,28 @@ public class ProductController {
         }
 
     }
-   
+
+    @GetMapping("purchased-items/{characterId}")
+    public ResponseEntity<List<Product>> getPurchasedItems(@PathVariable String characterId) {
+        try{
+            Optional<User> optionalUser = userRepository.findById(characterId);
+            if (!optionalUser.isPresent()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            User user = optionalUser.get();
+            List<String> purchasedItems = user.getPurchasedItems();
+            List<Product> products = new ArrayList<>();
+            for (String item : purchasedItems) {
+                Optional<Product> optionalProduct = productRepository.findById(item);
+                if (!optionalProduct.isPresent()) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+                Product product = optionalProduct.get();
+                products.add(product);  
+            }
+            return ResponseEntity.status(200).body(products);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.harith.ecommerce.Model;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
@@ -86,9 +87,16 @@ public class User {
     public void addPurchasedItem(String item) {
         this.purchasedItems.add(item);
     }
-
-    public void addPurchasedItem(Set<String> item) {
-        this.purchasedItems.addAll(item);
+    
+    public void addPurchasedItem(Map<String, Integer> items) {
+        for (Map.Entry<String, Integer> item : items.entrySet()) {
+            String id = item.getKey();
+            int quanity = item.getValue();
+            for (int i = 0; i < quanity; i++) {
+                this.purchasedItems.add(id);
+            }
+            
+        }
     }
     
 

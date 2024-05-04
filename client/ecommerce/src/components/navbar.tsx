@@ -5,16 +5,17 @@ import { IShopContext, ShopContext } from "../context/shop-context";
 export const NavBar = () => {
   // ADD THE LOGOUT LOGIC
   const [_, setCookies] = useCookies(["access_token"]);
-    const navigate = useNavigate(); 
-    const {deleteAll, availableMoney} = useContext<IShopContext>(ShopContext);
+  const navigate = useNavigate();
+  const { deleteAll, availableMoney, setIsLoggedIn } =
+    useContext<IShopContext>(ShopContext);
 
   const logout = () => {
     try {
-        setCookies("access_token", null, { path: '/' });
-        localStorage.removeItem("userID");
-        deleteAll();
-        navigate("/");
-        
+      setCookies("access_token", null, { path: "/" });
+      localStorage.clear();
+      deleteAll();
+      setIsLoggedIn(false);
+      navigate("/");
     } catch (e) {
       alert("Unable to logout!");
     }
@@ -24,8 +25,8 @@ export const NavBar = () => {
       <div>
         <h1> Adventurer's Store</h1>
       </div>
-          <div>
-              <span>{availableMoney}</span>
+      <div>
+        <span>{availableMoney}</span>
         <Link to="/shop">Store</Link>
         <Link to="/purchased-items">Purchases</Link>
         <Link to="/checkout">Checkout</Link>

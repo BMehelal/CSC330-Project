@@ -3,6 +3,7 @@ import { useGetProducts } from "../hooks/useGetProducts";
 import { IProduct } from "../models/interfaces";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ProductError } from "../models/errors";
 export interface IShopContext {
   addToCart: (itemId: string) => void;
   removeFromCart: (itemId: string) => void;
@@ -13,6 +14,9 @@ export interface IShopContext {
   deleteAll: () => void;
   checkout: () => void;
   availableMoney: number;
+  purchasedItems: IProduct[];
+  isLoggedIn: boolean;
+  setIsLoggedIn: (loggedIn: boolean) => void;
 }
 const defaultVal: IShopContext = {
   addToCart: () => null,
@@ -24,6 +28,9 @@ const defaultVal: IShopContext = {
   deleteAll: () => null,
   checkout: () => null,
   availableMoney: 0,
+  purchasedItems: [],
+  isLoggedIn: false,
+  setIsLoggedIn: () => null,
 };
 export const ShopContext = createContext<IShopContext>(defaultVal);
 export const ShopContextProvider = (props) => {
@@ -31,6 +38,7 @@ export const ShopContextProvider = (props) => {
   const [availableMoney, setAvailableMoney] = useState<number>(0);
   const { products } = useGetProducts();
   const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const navigate = useNavigate();
   const fetchAvailableMoney = async () => {
     try {
@@ -44,7 +52,18 @@ export const ShopContextProvider = (props) => {
       alert("ERROR: Something went wrong.");
     }
   };
-  
+  const fetchPurchasedItems = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8090/api/purchased-items/${localStorage.getItem(
+          "userID"
+        )}`
+      );
+      setPurchasedItems(res.data);
+    } catch (e) {
+      alert("ERROR: Something went wrong.");
+    }
+  };
   const getCartItemCount = (itemId: string): number => {
     if (itemId in cartItems) {
       return cartItems[itemId];
@@ -104,14 +123,34 @@ export const ShopContextProvider = (props) => {
       await axios.post("http://localhost:8090/api/checkout", body);
       setCartItems({});
       fetchAvailableMoney();
+      fetchPurchasedItems();
       navigate("/shop");
     } catch (err) {
-      alert("ERROR: Something went wrong.");
+      let errorMessage: string = "";
+      switch (err.response.data) {
+        case ProductError.INSUFFICIENT_FUNDS:
+          errorMessage = ProductError.INSUFFICIENT_FUNDS;
+          break;
+        case ProductError.CANNOT_BUY_YOUR_OWN_PRODUCT:
+          errorMessage = ProductError.CANNOT_BUY_YOUR_OWN_PRODUCT;
+          break;
+        case ProductError.NOT_ENOUGH_STOCK:
+          errorMessage = ProductError.NOT_ENOUGH_STOCK;
+          break;
+        default:
+          errorMessage = "Something went wrong.";
+          break;
+      }
+      errorMessage = "ERROR: " + errorMessage;
+      alert(errorMessage);
     }
   };
   useEffect(() => {
-    fetchAvailableMoney();
-  }, []);
+    if (isLoggedIn) {
+      fetchAvailableMoney();
+      fetchPurchasedItems();
+    }
+  }, [isLoggedIn]);
   const contextValue: IShopContext = {
     addToCart,
     removeFromCart,
@@ -122,6 +161,9 @@ export const ShopContextProvider = (props) => {
     deleteAll,
     checkout,
     availableMoney,
+    purchasedItems,
+    isLoggedIn,
+    setIsLoggedIn,
   };
 
   return (

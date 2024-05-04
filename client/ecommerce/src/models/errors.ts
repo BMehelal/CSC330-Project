@@ -1,11 +1,11 @@
 export enum UserError{
-    NO_USER_FOUND = "no-user-found",
-    USERNAME_ALREADY_EXISTS = "username-already-exists",
-    WRONG_CREDENTIALS = "wrong-credentials"
+    NO_USER_FOUND = "No-User-Found",
+    USERNAME_ALREADY_EXISTS = "Username-Already-Exists",
+    WRONG_CREDENTIALS = "Wrong-Credentials"
 }
 export enum ProductError{
-    NO_PRODUCT_FOUND="no-product-found",
-    NOT_ENOUGH_STOCK="not-enough-stock",
-    INSUFFICIENT_FUNDS="not-enough-Relm",
-    CANNOT_BUY_YOUR_OWN_PRODUCT="cannot-buy-your-own-product"
+    NO_PRODUCT_FOUND="No-Product-Found",
+    NOT_ENOUGH_STOCK="Not-Enough-Stock",
+    INSUFFICIENT_FUNDS="Not-Enough-Relm",
+    CANNOT_BUY_YOUR_OWN_PRODUCT="Cannot-Buy-Your-Own-Product"
 }

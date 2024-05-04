@@ -1,8 +1,9 @@
-import { useState, SyntheticEvent } from "react";
+import { useState, SyntheticEvent, useContext } from "react";
 import axios from "axios";
 import { UserError } from "../../models/errors";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { IShopContext, ShopContext } from "../../context/shop-context";
 export const AuthPage = () => {
   return (
     <>
@@ -141,6 +142,7 @@ const Login = () => {
   const [usernameError, setUsernameError] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<boolean>(false);
   const [_, setCookies] = useCookies(["access_token"]);
+  const { setIsLoggedIn } = useContext<IShopContext>(ShopContext);
   const navigate = useNavigate();
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -156,6 +158,7 @@ const Login = () => {
         });
         setCookies("access_token", result.data);
         localStorage.setItem("userID", result.data);
+        setIsLoggedIn(true);
         navigate("/shop");
       }
     } catch (e) {
@@ -180,20 +183,20 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <h2>Login</h2>
           <div>
-            <label htmlFor="username">Username: </label>
+            <label htmlFor="username2">Username: </label>
             <input
               type="text"
-              id="username"
+              id="username2"
               onChange={(e) => setUsername(e.target.value)}
               value={username}
             />
           </div>
 
           <div>
-            <label htmlFor="password">Password: </label>
+            <label htmlFor="password2">Password: </label>
             <input
               type="password"
-              id="password"
+              id="password2"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
