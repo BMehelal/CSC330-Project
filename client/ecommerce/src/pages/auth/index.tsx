@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export const AuthPage = () => {
   return (
     <>
-      <h2>Adventurer's Store</h2>
+      <h1>Adventurer's Store</h1>
       <Register />
       <Login />
     </>
