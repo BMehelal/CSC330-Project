@@ -30,10 +30,12 @@ export const Product = (props: Props) => {
         <p>Seller: {sellerName}</p>
       </div>
       <div>
-        {stockQuanity > 0 && (
+        {stockQuanity > 0 ? (
           <button onClick={() => addToCart(productId)}>
             Add To Satchel {cartItemCount > 0 && <>({cartItemCount})</>}
           </button>
+        ) : (
+          <h2>SOLD OUT</h2>
         )}
       </div>
     </>

@@ -20,7 +20,7 @@ export const CartItem = (props: Props) => {
     removeFromCart,
     updateCartItemAmount,
     getCartItemCount,
-    deleteItem
+    deleteItem,
   } = useContext<IShopContext>(ShopContext);
   const cartItemCount = getCartItemCount(productId);
 

@@ -7,7 +7,7 @@ import { CartItem } from "./cart-item";
 import { useNavigate } from "react-router-dom";
 
 export const CheckoutPage = () => {
-  const { getCartItemCount, getTotalCartAmount } =
+  const { getCartItemCount, getTotalCartAmount, checkout } =
     useContext<IShopContext>(ShopContext);
   const { products } = useGetProducts();
   const totalAmount = getTotalCartAmount();
@@ -21,14 +21,14 @@ export const CheckoutPage = () => {
       <div>
         {products.map((product: IProduct) => {
           if (getCartItemCount(product.productId) > 0) {
-            return <CartItem product={product} />;
+            return <CartItem key={product.productId} product={product} />;
           }
         })}
         {totalAmount > 0 ? (
           <div>
             <p>Subtotal: {totalAmount}</p>
-            <button onClick = {()=>navigate("/shop")}>Continue Shopping</button>
-            <button>Checkout</button>
+            <button onClick={() => navigate("/shop")}>Continue Shopping</button>
+            <button onClick={checkout}>Checkout</button>
           </div>
         ) : (
           <div>

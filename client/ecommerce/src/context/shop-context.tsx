@@ -1,6 +1,8 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useGetProducts } from "../hooks/useGetProducts";
 import { IProduct } from "../models/interfaces";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 export interface IShopContext {
   addToCart: (itemId: string) => void;
   removeFromCart: (itemId: string) => void;
@@ -8,6 +10,9 @@ export interface IShopContext {
   getCartItemCount: (itemId: string) => number;
   deleteItem: (itemId: string) => void;
   getTotalCartAmount: () => number;
+  deleteAll: () => void;
+  checkout: () => void;
+  availableMoney: number;
 }
 const defaultVal: IShopContext = {
   addToCart: () => null,
@@ -16,11 +21,30 @@ const defaultVal: IShopContext = {
   getCartItemCount: () => 0,
   deleteItem: () => null,
   getTotalCartAmount: () => 0,
+  deleteAll: () => null,
+  checkout: () => null,
+  availableMoney: 0,
 };
 export const ShopContext = createContext<IShopContext>(defaultVal);
 export const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState<{ string: number } | {}>({});
+  const [availableMoney, setAvailableMoney] = useState<number>(0);
   const { products } = useGetProducts();
+  const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
+  const navigate = useNavigate();
+  const fetchAvailableMoney = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8090/api/available-money/${localStorage.getItem(
+          "userID"
+        )}`
+      );
+      setAvailableMoney(res.data);
+    } catch (e) {
+      alert("ERROR: Something went wrong.");
+    }
+  };
+  
   const getCartItemCount = (itemId: string): number => {
     if (itemId in cartItems) {
       return cartItems[itemId];
@@ -68,6 +92,26 @@ export const ShopContextProvider = (props) => {
     }
     return totalAmount;
   };
+  const deleteAll = () => {
+    setCartItems({});
+  };
+  const checkout = async () => {
+    const body = {
+      customerId: localStorage.getItem("userID"),
+      cartItem: cartItems,
+    };
+    try {
+      await axios.post("http://localhost:8090/api/checkout", body);
+      setCartItems({});
+      fetchAvailableMoney();
+      navigate("/shop");
+    } catch (err) {
+      alert("ERROR: Something went wrong.");
+    }
+  };
+  useEffect(() => {
+    fetchAvailableMoney();
+  }, []);
   const contextValue: IShopContext = {
     addToCart,
     removeFromCart,
@@ -75,6 +119,9 @@ export const ShopContextProvider = (props) => {
     getCartItemCount,
     deleteItem,
     getTotalCartAmount,
+    deleteAll,
+    checkout,
+    availableMoney,
   };
 
   return (
