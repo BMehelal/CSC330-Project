@@ -17,6 +17,7 @@ export interface IShopContext {
   purchasedItems: IProduct[];
   isLoggedIn: boolean;
   setIsLoggedIn: (loggedIn: boolean) => void;
+  characterURL: string;
 }
 const defaultVal: IShopContext = {
   addToCart: () => null,
@@ -31,6 +32,7 @@ const defaultVal: IShopContext = {
   purchasedItems: [],
   isLoggedIn: false,
   setIsLoggedIn: () => null,
+  characterURL: "",
 };
 export const ShopContext = createContext<IShopContext>(defaultVal);
 export const ShopContextProvider = (props) => {
@@ -39,6 +41,7 @@ export const ShopContextProvider = (props) => {
   const { products } = useGetProducts();
   const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [characterURL, setCharacterURL] = useState<string>("");
   const navigate = useNavigate();
   const fetchAvailableMoney = async () => {
     try {
@@ -145,10 +148,29 @@ export const ShopContextProvider = (props) => {
       alert(errorMessage);
     }
   };
+
+  const fetchCharacterURL = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8090/api/character/${localStorage.getItem("userID")}`
+      );
+      setCharacterURL(res.data);
+    } catch (e) {
+      alert("ERROR: Something went wrong.");
+    }
+  };
+
+
   useEffect(() => {
+    const check = localStorage.getItem("login");
+    if (check ===null) {
+      return;
+    }
+    setIsLoggedIn(JSON.parse(check));
     if (isLoggedIn) {
       fetchAvailableMoney();
       fetchPurchasedItems();
+      fetchCharacterURL();
     }
   }, [isLoggedIn]);
   const contextValue: IShopContext = {
@@ -164,6 +186,7 @@ export const ShopContextProvider = (props) => {
     purchasedItems,
     isLoggedIn,
     setIsLoggedIn,
+    characterURL,
   };
 
   return (

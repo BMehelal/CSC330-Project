@@ -4,12 +4,59 @@ import { UserError } from "../../models/errors";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { IShopContext, ShopContext } from "../../context/shop-context";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Grid,
+  MenuItem,
+  Paper,
+  TextField,
+  Toolbar,
+  Typography,
+  styled,
+} from "@mui/material";
 export const AuthPage = () => {
+  const StyledAppBar = styled(AppBar)({
+    marginBottom: "20px", // Add margin bottom to create space below the AppBar
+  });
   return (
     <>
-      <h1>Adventurer's Store</h1>
-      <Register />
-      <Login />
+      <StyledAppBar position="static" sx={{ backgroundColor: "#1A1A1A", p: 2 }}>
+        <Toolbar>
+          <Avatar
+            sx={{ weight: 60, height: 50, m: 1 }}
+            src="https://i.ibb.co/mCJMXmg/Relm-removebg-preview.png"
+          ></Avatar>
+          <Typography
+            variant="h2"
+            component="div"
+            sx={{ flexGrow: 1, color: "#FAF9F6" }}
+          >
+            Adventurer's Store
+          </Typography>
+        </Toolbar>
+      </StyledAppBar>
+      <Grid container justifyContent="center" spacing={15}>
+        <Grid item>
+          <Card elevation={10}>
+            <CardContent sx={{ p: 5, m: 2 }}>
+              <Register />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item>
+          <Card elevation={10}>
+            <CardContent sx={{ p: 4, m: 2, height: "490px" }}>
+              <Login />
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
     </>
   );
 };
@@ -25,6 +72,10 @@ const Register = () => {
   const [characterError, setCharacterError] = useState<boolean>(false);
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
+    setUsernameError(false);
+    setPasswordError(false);
+    setGenderError(false);
+    setCharacterError(false);
     if (username === "") {
       setUsernameError(true);
     } else if (password === "") {
@@ -41,6 +92,10 @@ const Register = () => {
           gender,
           characterURL,
         });
+        setUsername("");
+        setPassword("");
+        setGender("");
+        setCharacterURL("");
         alert(
           "You have successfully registered for an account! Now please login in."
         );
@@ -55,82 +110,104 @@ const Register = () => {
   };
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <h2>Register</h2>
+      <Typography sx={{ p: 1 }} variant="h2">
+        Register
+      </Typography>
+      <form autoComplete="off" onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
+          <TextField
+            sx={{ m: 1 }}
             onChange={(e) => setUsername(e.target.value)}
-          />
+            label="username"
+            value={username}
+            variant="outlined"
+            required
+            defaultValue={"username"}
+            error={usernameError}
+          ></TextField>
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
+          <TextField
+            sx={{ m: 1 }}
             onChange={(e) => setPassword(e.target.value)}
-          />
+            label="password"
+            type="password"
+            value={password}
+            variant="outlined"
+            required
+            defaultValue={"password"}
+            error={passwordError}
+          ></TextField>
         </div>
         <div>
-          <label htmlFor="gender">Gender:</label>
-          <select
-            id="gender"
-            name="gender"
+          <TextField
+            sx={{ m: 1 }}
+            select
+            label="Select your gender"
             value={gender}
+            required
+            fullWidth
+            error={genderError}
             onChange={(e) => setGender(e.target.value)}
           >
-            <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
+            <MenuItem value="male">Male</MenuItem>
+            <MenuItem value="female">Female</MenuItem>
+            <MenuItem value="other">Other</MenuItem>
+          </TextField>
         </div>
         <div>
-          <label htmlFor="character">Character:</label>
-          <select
-            id="character"
-            name="character"
+          <TextField
+            sx={{ m: 1 }}
+            select
+            label="Select your character"
             value={characterURL}
+            required
+            fullWidth
+            error={characterError}
             onChange={(e) => setCharacterURL(e.target.value)}
           >
-            <option value="">Select Character</option>
+            <MenuItem value="">Select Character</MenuItem>
             {(gender === "female" || gender === "other") && (
-              <option value="https://i.ibb.co/kqbj54L/female-warrior.png">
+              <MenuItem value="https://i.ibb.co/kqbj54L/female-warrior.png">
                 Female Warrior
-              </option>
+              </MenuItem>
             )}
             {(gender === "female" || gender === "other") && (
-              <option value="https://art.pixilart.com/8e5fd81934755df.png">
+              <MenuItem value="https://art.pixilart.com/8e5fd81934755df.png">
                 Female Cleric
-              </option>
+              </MenuItem>
             )}
             {(gender === "female" || gender === "other") && (
-              <option value="https://i.ibb.co/CVBhvkH/female-wizard.png">
+              <MenuItem value="https://i.ibb.co/CVBhvkH/female-wizard.png">
                 Female Wizard
-              </option>
+              </MenuItem>
             )}
             {(gender === "male" || gender === "other") && (
-              <option value="https://i.ibb.co/drWR30G/thief-2.png">
+              <MenuItem value="https://i.ibb.co/drWR30G/thief-2.png">
                 Male Thief
-              </option>
+              </MenuItem>
             )}
             {(gender === "male" || gender === "other") && (
-              <option value="https://i.ibb.co/gwRn2ss/warrior.jpg">
+              <MenuItem value="https://i.ibb.co/gwRn2ss/warrior.jpg">
                 Male Warrior
-              </option>
+              </MenuItem>
             )}
             {(gender === "male" || gender === "other") && (
-              <option value="https://i.ibb.co/G59N8Xt/wizard-3.png">
+              <MenuItem value="https://i.ibb.co/G59N8Xt/wizard-3.png">
                 Male Wizard
-              </option>
+              </MenuItem>
             )}
-          </select>
+          </TextField>
         </div>
-        <button type="submit">Register</button>
+        <Button
+          sx={{
+            m: 1,
+          }}
+          variant="contained"
+          type="submit"
+        >
+          Register
+        </Button>
       </form>
     </>
   );
@@ -147,6 +224,8 @@ const Login = () => {
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
     try {
+      setUsernameError(false);
+      setPasswordError(false);
       if (username === "") {
         setUsernameError(true);
       } else if (password === "") {
@@ -159,6 +238,9 @@ const Login = () => {
         setCookies("access_token", result.data);
         localStorage.setItem("userID", result.data);
         setIsLoggedIn(true);
+        localStorage.setItem("login", JSON.stringify(true));
+        setUsername("");
+        setPassword("");
         navigate("/shop");
       }
     } catch (e) {
@@ -181,27 +263,36 @@ const Login = () => {
     <>
       <div>
         <form onSubmit={handleSubmit}>
-          <h2>Login</h2>
+          <Typography sx={{ p: 2 }} variant="h2">
+            Login
+          </Typography>
           <div>
-            <label htmlFor="username2">Username: </label>
-            <input
-              type="text"
-              id="username2"
+            <TextField
+              sx={{ m: 2 }}
               onChange={(e) => setUsername(e.target.value)}
+              label="username"
               value={username}
-            />
+              variant="outlined"
+              required
+              error={usernameError}
+            ></TextField>
           </div>
 
           <div>
-            <label htmlFor="password2">Password: </label>
-            <input
-              type="password"
-              id="password2"
+            <TextField
+              sx={{ m: 2 }}
               onChange={(e) => setPassword(e.target.value)}
+              label="password"
+              type="password"
               value={password}
-            />
+              variant="outlined"
+              required
+              error={passwordError}
+            ></TextField>
           </div>
-          <button type="submit">Login</button>
+          <Button sx={{ p: 1, m: 2 }} variant="contained" type="submit">
+            Login
+          </Button>
         </form>
       </div>
     </>
