@@ -80,7 +80,7 @@ export const ShopPage = () => {
                 border: "2px solid #7a5b82",
                 boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
               }}
-              src="https://cdn.discordapp.com/attachments/1227266468513710201/1236005491365122058/d7f6066469e75c76dcdb04c87968e67c.png?ex=66366f51&is=66351dd1&hm=dc0c921cdd6fb1baee18f61a96150469b0432a0b2fd51b8e0d16b58fde5d7363&"
+              src="https://i.ibb.co/KXJTCf7/shop-keeper.png"
               alt={dialogue}
             />
             <Typography variant="h6" sx={{ ml: 9 }}>
