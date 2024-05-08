@@ -17,6 +17,7 @@ export interface IShopContext {
   purchasedItems: IProduct[];
   isLoggedIn: boolean;
   setIsLoggedIn: (loggedIn: boolean) => void;
+  characterURL: string;
 }
 const defaultVal: IShopContext = {
   addToCart: () => null,
@@ -31,14 +32,19 @@ const defaultVal: IShopContext = {
   purchasedItems: [],
   isLoggedIn: false,
   setIsLoggedIn: () => null,
+  characterURL: "",
 };
 export const ShopContext = createContext<IShopContext>(defaultVal);
 export const ShopContextProvider = (props) => {
-  const [cartItems, setCartItems] = useState<{ string: number } | {}>({});
+  const initialCartItems = JSON.parse(localStorage.getItem("cartItems")) || {};
+  const [cartItems, setCartItems] = useState<{ string: number } | {}>(
+    initialCartItems
+  );
   const [availableMoney, setAvailableMoney] = useState<number>(0);
   const { products } = useGetProducts();
   const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [characterURL, setCharacterURL] = useState<string>("");
   const navigate = useNavigate();
   const fetchAvailableMoney = async () => {
     try {
@@ -106,7 +112,11 @@ export const ShopContextProvider = (props) => {
         let itemInfo: IProduct = products.find(
           (product) => product.productId === item
         );
-        totalAmount += itemInfo.price * cartItems[item];
+        if (itemInfo && itemInfo.price) {
+          totalAmount += itemInfo.price * cartItems[item];
+        } else {
+          console.error(`Product with ID ${item} not found or has no price.`);
+        }
       }
     }
     return totalAmount;
@@ -145,12 +155,37 @@ export const ShopContextProvider = (props) => {
       alert(errorMessage);
     }
   };
+
+  const fetchCharacterURL = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8090/api/character/${localStorage.getItem("userID")}`
+      );
+      setCharacterURL(res.data);
+    } catch (e) {
+      alert("ERROR: Something went wrong.");
+    }
+  };
+
   useEffect(() => {
+    const check = localStorage.getItem("login");
+    if (check === null) {
+      return;
+    }
+    setIsLoggedIn(JSON.parse(check));
     if (isLoggedIn) {
       fetchAvailableMoney();
       fetchPurchasedItems();
+      fetchCharacterURL();
     }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
+
   const contextValue: IShopContext = {
     addToCart,
     removeFromCart,
@@ -164,6 +199,7 @@ export const ShopContextProvider = (props) => {
     purchasedItems,
     isLoggedIn,
     setIsLoggedIn,
+    characterURL,
   };
 
   return (
