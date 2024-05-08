@@ -55,7 +55,7 @@ export const NavBar = () => {
       <StyledAppBar position="static" sx={{ backgroundColor: "#1A1A1A", p: 2 }}>
         <Toolbar>
           <Avatar
-            sx={{ weight: 60, height: 50, m: 1 }}
+            sx={{weight: 60, height: 50, m: 1 }}
             src="https://i.ibb.co/mCJMXmg/Relm-removebg-preview.png"
           ></Avatar>
           <Typography

@@ -7,14 +7,11 @@ import { IShopContext, ShopContext } from "../../context/shop-context";
 import {
   AppBar,
   Avatar,
-  Box,
   Button,
   Card,
   CardContent,
-  Container,
   Grid,
   MenuItem,
-  Paper,
   TextField,
   Toolbar,
   Typography,
@@ -122,7 +119,6 @@ const Register = () => {
             value={username}
             variant="outlined"
             required
-            defaultValue={"username"}
             error={usernameError}
           ></TextField>
         </div>
@@ -135,7 +131,6 @@ const Register = () => {
             value={password}
             variant="outlined"
             required
-            defaultValue={"password"}
             error={passwordError}
           ></TextField>
         </div>

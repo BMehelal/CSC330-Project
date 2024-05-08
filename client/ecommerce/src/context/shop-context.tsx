@@ -36,7 +36,10 @@ const defaultVal: IShopContext = {
 };
 export const ShopContext = createContext<IShopContext>(defaultVal);
 export const ShopContextProvider = (props) => {
-  const [cartItems, setCartItems] = useState<{ string: number } | {}>({});
+  const initialCartItems = JSON.parse(localStorage.getItem("cartItems")) || {};
+  const [cartItems, setCartItems] = useState<{ string: number } | {}>(
+    initialCartItems
+  );
   const [availableMoney, setAvailableMoney] = useState<number>(0);
   const { products } = useGetProducts();
   const [purchasedItems, setPurchasedItems] = useState<IProduct[]>([]);
@@ -109,7 +112,11 @@ export const ShopContextProvider = (props) => {
         let itemInfo: IProduct = products.find(
           (product) => product.productId === item
         );
-        totalAmount += itemInfo.price * cartItems[item];
+        if (itemInfo && itemInfo.price) {
+          totalAmount += itemInfo.price * cartItems[item];
+        } else {
+          console.error(`Product with ID ${item} not found or has no price.`);
+        }
       }
     }
     return totalAmount;
@@ -160,10 +167,9 @@ export const ShopContextProvider = (props) => {
     }
   };
 
-
   useEffect(() => {
     const check = localStorage.getItem("login");
-    if (check ===null) {
+    if (check === null) {
       return;
     }
     setIsLoggedIn(JSON.parse(check));
@@ -173,6 +179,13 @@ export const ShopContextProvider = (props) => {
       fetchCharacterURL();
     }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
+
   const contextValue: IShopContext = {
     addToCart,
     removeFromCart,
