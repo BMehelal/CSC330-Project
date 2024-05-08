@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { IShopContext, ShopContext } from "../../context/shop-context";
 import {
+  Alert,
   AppBar,
   Avatar,
   Button,
@@ -94,11 +95,13 @@ const Register = () => {
         setGender("");
         setCharacterURL("");
         alert(
-          "You have successfully registered for an account! Now please login in."
+          "You have successfully registered for an account! Now please login."
         );
       } catch (err) {
-        if (err?.response?.data === UserError.USERNAME_ALREADY_EXISTS) {
-          alert("Username already in use.");
+        if (String(err?.response?.data) === UserError.USERNAME_ALREADY_EXISTS) {
+          alert(
+            "ERROR: Usernameis already in use, please use a different one."
+          );
         } else {
           alert("ERROR: Something went wrong");
         }
