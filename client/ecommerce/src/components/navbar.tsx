@@ -71,7 +71,7 @@ export const NavBar = () => {
             </Typography>
             <Avatar
               sx={{ mr: 2 }}
-              src="https://cdn.discordapp.com/attachments/1227266468513710201/1235336515618344990/CBB8B9E4-8E6A-426D-BF99-0A2C313FC77C.png?ex=6639ef08&is=66389d88&hm=040be63353cc6d552945da1cde9595506917663b770829f2cd323e53dc0626cd&"
+              src="https://i.ibb.co/fqQJvGP/reln.png"
             ></Avatar>
             <Link
               href="/shop"
