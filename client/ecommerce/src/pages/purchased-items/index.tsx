@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardMedia,
   Grid,
-  Stack,
   Typography,
 } from "@mui/material";
 

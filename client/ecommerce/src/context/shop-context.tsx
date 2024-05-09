@@ -49,7 +49,7 @@ export const ShopContextProvider = (props) => {
   const fetchAvailableMoney = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8090/api/available-money/${localStorage.getItem(
+        `https://csc-330-server.onrender.com/api/available-money/${localStorage.getItem(
           "userID"
         )}`
       );
@@ -61,7 +61,7 @@ export const ShopContextProvider = (props) => {
   const fetchPurchasedItems = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8090/api/purchased-items/${localStorage.getItem(
+        `https://csc-330-server.onrender.com/api/purchased-items/${localStorage.getItem(
           "userID"
         )}`
       );
@@ -130,7 +130,7 @@ export const ShopContextProvider = (props) => {
       cartItem: cartItems,
     };
     try {
-      await axios.post("http://localhost:8090/api/checkout", body);
+      await axios.post("https://csc-330-server.onrender.com/api/checkout", body);
       setCartItems({});
       fetchAvailableMoney();
       fetchPurchasedItems();
@@ -159,7 +159,7 @@ export const ShopContextProvider = (props) => {
   const fetchCharacterURL = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8090/api/character/${localStorage.getItem("userID")}`
+        `https://csc-330-server.onrender.com/api/character/${localStorage.getItem("userID")}`
       );
       setCharacterURL(res.data);
     } catch (e) {

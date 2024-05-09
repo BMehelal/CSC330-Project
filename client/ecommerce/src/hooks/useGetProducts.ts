@@ -9,7 +9,7 @@ export const useGetProducts = () => {
 
     const fetchProducts = async () => {
         try {
-            const fetchedProducts = await axios.get("http://localhost:8090/api/products");
+            const fetchedProducts = await axios.get("https://csc-330-server.onrender.com/api/products");
             setProducts(fetchedProducts.data); 
         } catch (err) {
             alert("ERROR: Something went wrong");

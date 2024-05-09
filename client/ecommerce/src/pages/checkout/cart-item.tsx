@@ -4,7 +4,6 @@ import { IShopContext, ShopContext } from "../../context/shop-context";
 import {
   Button,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   CardHeader,
